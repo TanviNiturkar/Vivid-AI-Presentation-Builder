@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
 
     const hmac = crypto.createHmac('sha256', secret)
     const digest = hmac.update(rawBody).digest('hex')
-    const signatureHeader = req.headers.get('X-Signature')
+    const signatureHeader = req.headers.get('x-signature') ?? req.headers.get('X-Signature')
+
 
     if (!signatureHeader) {
       throw new Error('Missing signature header')
