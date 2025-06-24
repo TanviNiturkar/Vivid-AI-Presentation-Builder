@@ -7,7 +7,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import PresentationMode from './PresentationMode';
-import pptxgen from 'pptxgenjs';
+
 
 type Props = {
   presentationId: string;
@@ -52,103 +52,107 @@ const Navbar = ({ presentationId }: Props) => {
   };
 
   const handleDownload = async () => {
-    const pres = new pptxgen();
+  const pptxgen = (await import('pptxgenjs')).default; // ✅ dynamic import
+  const pres = new pptxgen();
 
-    const theme = {
-      fontFamily: currentTheme?.fontFamily?.replace(/['"]+/g, '') || 'Arial',
-      fontColor: currentTheme?.fontColor || '#000000',
-      accentColor: currentTheme?.accentColor || '#0ea5e9',
-      slideBackgroundColor: currentTheme?.slideBackgroundColor || '#ffffff',
-    };
+  const theme = {
+    fontFamily: currentTheme?.fontFamily?.replace(/['"]+/g, '') || 'Arial',
+    fontColor: currentTheme?.fontColor || '#000000',
+    accentColor: currentTheme?.accentColor || '#0ea5e9',
+    slideBackgroundColor: currentTheme?.slideBackgroundColor || '#ffffff',
+  };
 
-    const validHex = /^#([A-Fa-f0-9]{6})$/;
-    const slideBg = validHex.test(theme.slideBackgroundColor) ? theme.slideBackgroundColor : '#ffffff';
+  const validHex = /^#([A-Fa-f0-9]{6})$/;
+  const slideBg = validHex.test(theme.slideBackgroundColor)
+    ? theme.slideBackgroundColor
+    : '#ffffff';
 
-    for (const slide of slides) {
-      const s = pres.addSlide();
-      s.background = { fill: '#e8f5e9' }; // ✅ Working background color
+  for (const slide of slides) {
+    const s = pres.addSlide();
+    s.background = { fill: slideBg };
 
-      const blocks = extractContentBlocks(slide.content);
-      let y = 0.5;
+    const blocks = extractContentBlocks(slide.content);
+    let y = 0.5;
 
-      if (blocks.length === 0) {
-        s.addText('Empty Slide', {
+    if (blocks.length === 0) {
+      s.addText('Empty Slide', {
+        x: 0.5,
+        y,
+        w: 9,
+        fontSize: 24,
+        fontFace: theme.fontFamily,
+        color: theme.accentColor,
+        bold: true,
+      });
+      continue;
+    }
+
+    for (const block of blocks) {
+      const text = block.content || block.placeholder || '';
+
+      if (block.type === 'heading1') {
+        s.addText(text, {
+          x: 0.5,
+          y,
+          w: 9,
+          fontSize: 28,
+          bold: true,
+          fontFace: theme.fontFamily,
+          color: theme.fontColor,
+        });
+        y += 1;
+      }
+
+      if (block.type === 'heading2') {
+        s.addText(text, {
           x: 0.5,
           y,
           w: 9,
           fontSize: 24,
+          bold: true,
           fontFace: theme.fontFamily,
           color: theme.accentColor,
-          bold: true,
         });
-        continue;
+        y += 0.8;
       }
 
-      for (const block of blocks) {
-        const text = block.content || block.placeholder || '';
+      if (block.type === 'paragraph') {
+        s.addText(text, {
+          x: 0.5,
+          y,
+          w: 9,
+          fontSize: 20,
+          fontFace: theme.fontFamily,
+          color: theme.fontColor,
+        });
+        y += 1;
+      }
 
-        if (block.type === 'heading1') {
-          s.addText(text, {
+      if (
+        block.type === 'image' &&
+        typeof block.content === 'string' &&
+        block.content.startsWith('http')
+      ) {
+        const base64 = await fetchBase64(block.content);
+        if (base64) {
+          s.addImage({
             x: 0.5,
             y,
-            w: 9,
-            fontSize: 28,
-            bold: true,
-            fontFace: theme.fontFamily,
-            color: theme.fontColor,
+            w: 6,
+            h: 3.5,
+            data: base64,
           });
-          y += 1;
-        }
-
-        if (block.type === 'heading2') {
-          s.addText(text, {
-            x: 0.5,
-            y,
-            w: 9,
-            fontSize: 24,
-            bold: true,
-            fontFace: theme.fontFamily,
-            color: theme.accentColor,
-          });
-          y += 0.8;
-        }
-
-        if (block.type === 'paragraph') {
-          s.addText(text, {
-            x: 0.5,
-            y,
-            w: 9,
-            fontSize: 20,
-            fontFace: theme.fontFamily,
-            color: theme.fontColor,
-          });
-          y += 1;
-        }
-
-        if (
-          block.type === 'image' &&
-          typeof block.content === 'string' &&
-          block.content.startsWith('http')
-        ) {
-          const base64 = await fetchBase64(block.content);
-          if (base64) {
-            s.addImage({
-              x: 0.5,
-              y,
-              w: 6,
-              h: 3.5,
-              data: base64,
-            });
-            y += 4;
-          } else {
-            console.warn('Skipped image:', block.content);
-          }
+          y += 4;
+        } else {
+          console.warn('Skipped image:', block.content);
         }
       }
     }
+  }
 
-    await pres.writeFile({ fileName: 'Vivid_Presentation.pptx' });
-  };
+  await pres.writeFile({ fileName: 'Vivid_Presentation.pptx' });
+};
+
 
   return (
     <nav
