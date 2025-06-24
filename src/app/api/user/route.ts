@@ -1,4 +1,7 @@
 // app/api/user/route.ts
+
+export const dynamic = "force-dynamic"; // 👈 prevents build-time static analysis
+
 import { NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
 import { client } from "@/lib/prisma"
