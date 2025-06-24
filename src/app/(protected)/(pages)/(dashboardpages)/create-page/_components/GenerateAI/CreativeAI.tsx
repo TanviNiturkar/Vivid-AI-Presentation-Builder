@@ -53,7 +53,7 @@ const CreateAI = ({onBack}: Props) => {
         }
             
                 setIsGenerating(true)
-                const res = await generateCreativePrompt(currentAiPrompt,noOfCards)
+                const res = await generateCreativePrompt( { prompt: currentAiPrompt, count: noOfCards })
                 if(res.status === 200 && res?.data?.outlines){
                     const cardsData:OutlineCard[]=[]
                     res.data?.outlines.map((outline : string,idx:number)=>{

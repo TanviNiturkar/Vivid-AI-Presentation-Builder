@@ -103,31 +103,75 @@ export const recoverProject = async (projectId : string) => {
     }
 }
 
-export const deleteProject = async (projectId : string)=>{
-    try {
-        const checkUser= await onAuthenticateUser()
-       if(checkUser.status !== 200 || !checkUser.user){
-            return { status:403,error: 'User not autheticated'}
-        }
-
-        const updatedProject = await client.project.update({
-            where: {
-                id : projectId,
-            },
-            data: {
-                isDeleted:true,
-            },
-
-        })
-         if(!updatedProject){
-            return {status : 500,error:'Failed to delete project'}
-        }
-        return { status:200,data : updatedProject}
-    } catch (error) {
-         console.error('ERROR',error)
-        return {status : 500 , error:'Internal server error'}
+export const deleteProject = async (projectId: string) => {
+  try {
+    const checkUser = await onAuthenticateUser()
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: 'User not authenticated' }
     }
+
+    const updatedProject = await client.project.update({
+      where: {
+        id: projectId,
+      },
+      data: {
+        isDeleted: true,
+      },
+    })
+
+    if (!updatedProject) {
+      return { status: 500, error: 'Failed to delete project' }
+    }
+
+    return { status: 200, data: updatedProject }
+  } catch (error) {
+    console.error('ERROR', error)
+    return { status: 500, error: 'Internal server error' }
+  }
 }
+
+export const deleteAllProjects = async (projectIds: string[]) => {
+  try {
+    if (!Array.isArray(projectIds) || projectIds.length === 0) {
+      return { status: 400, error: 'No project IDs provided.' }
+    }
+    const checkUser = await onAuthenticateUser()
+    if (checkUser.status !== 200 || !checkUser.user) {
+      return { status: 403, error: 'User not authenticated.' }
+    }
+    const userId = checkUser.user.id
+
+    const projectsToDelete = await client.project.findMany({
+      where: {
+        id: {
+          in: projectIds,
+        },
+        userId: userId,
+      },
+    })
+
+    if (projectsToDelete.length === 0) {
+      return { status: 404, error: 'No projects found for the given IDs.' }
+    }
+
+    const deletedProjects = await client.project.deleteMany({
+      where: {
+        id: {
+          in: projectsToDelete.map((project: { id: string }) => project.id),
+        },
+      },
+    })
+
+    return {
+      status: 200,
+      message: `${deletedProjects.count} projects successfully deleted.`,
+    }
+  } catch (error) {
+    console.error('ERROR', error)
+    return { status: 500, error: 'Internal server error.' }
+  }
+}
+
 
 
 export const createProject = async (title : string ,outlines: OutlineCard[])=> {
@@ -231,44 +275,6 @@ export const updateTheme = async (projectId : string , theme :string)=> {
 }
 
 
-export const deleteAllProjects = async ( projectIds:string[])=> {
-    try {
-        if(!Array.isArray(projectIds) || projectIds.length === 0){
-            return {status : 400 , error : 'No project IDs provided.'}
-        }
-        const checkUser = await onAuthenticateUser()
-        if(checkUser.status !== 200 || !checkUser.user){
-            return {status : 403, error : 'User not authenticated.'}
-        }
-        const userId = checkUser.user.id
-
-        const projectsToDelete = await client.project.findMany({
-            where : {
-                id : {
-                    in : projectIds ,
-                },
-                userId : userId,
-            },
-        })
-        if(projectsToDelete.length === 0){
-            return { status : 404 , error:'No projects found for the given IDs.'}
-        }
-        const deletedProjects = await client.project.deleteMany({
-            where : {
-                id : {
-                    in : projectsToDelete.map((project) => project.id),
-                },
-            },
-        })
-        return {
-            status : 200 ,
-            message : `${deletedProjects.count} projects successfully deleted.`
-        }
-    } catch (error) {
-        console.error('ERROR',error)
-        return {status : 500 , error : 'Internal server error . '}
-    }
-}
 
 export const getDeletedProjects = async () => {
     try {

@@ -11,13 +11,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
-export const generateCreativePrompt = async (userPrompt: string) => {
+export const generateCreativePrompt = async ({prompt,count}: { prompt: string; count: number } ) => {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   })
 
   const finalPrompt = `
-    Create a coherent and relevant outline for the following prompt: ${userPrompt}.
+    Create a coherent and relevant outline for the following prompt: ${prompt}.
     The outline should consist of at least 6 points, with each point written as a single sentence.
     Ensure the outline is well-structured and directly related to the topic. 
     Return the output in the following JSON format:
