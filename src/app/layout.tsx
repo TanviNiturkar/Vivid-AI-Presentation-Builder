@@ -32,7 +32,10 @@ export default function RootLayout({
     <ClerkProvider
     appearance={{
       baseTheme:dark,
-    }}>
+    }}
+      signInUrl="/sign-in?redirect_url=/dashboard"
+  signUpUrl="/sign-up?redirect_url=/dashboard"
+  >
     <html lang="en"
     suppressHydrationWarning>
       <body

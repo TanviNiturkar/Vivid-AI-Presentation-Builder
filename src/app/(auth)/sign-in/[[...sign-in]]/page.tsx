@@ -2,5 +2,5 @@
 import { SignIn } from '@clerk/nextjs';
 
 export default function Signin() {
-  return <SignIn afterSignInUrl="/dashboard" />;
+  return <SignIn />;;
 }
