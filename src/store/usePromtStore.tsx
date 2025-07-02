@@ -1,44 +1,52 @@
-import { OutlineCard } from "@/lib/types";
-import { set } from "date-fns";
+// File: src/store/usePromptStore.ts
 import { create } from "zustand";
-import { persist ,devtools} from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
+import { OutlineCard } from "@/lib/types";
 
-type page = 'create'| 'creative-ai' | 'create-scratch'
+type Page = "create" | "creative-ai" | "create-scratch";
 
 type Prompt = {
-    id : string 
-    createdAt :  string
-    title : string 
-    outlines : OutlineCard[] | []
-}
+  id: string;
+  createdAt: string;
+  title: string;
+  outlines: OutlineCard[] | [];
+};
+
 type PromptStore = {
-    prompts: Prompt[] | []
-    page : page
-    setPage : (page:page)=> void
-    addPrompt : (prompt : Prompt) => void
-    removePrompt : (id: string) =>void
-}
-const usePromtStore = create<PromptStore>()(
-    devtools(
-        persist(
-            (set)=> ({
-     page: 'create',setPage :(page : page) => {
-        set({page})
-    },
-    removePrompt:(id:string) => {
-        set((state)=> ({
-            prompts : state.prompts.filter((prompt : Prompt) => prompt.id !== id),
+  prompts: Prompt[];
+  page: Page;
+  setPage: (page: Page) => void;
+  addPrompt: (prompt: Prompt) => void;
+  removePrompt: (id: string) => void;
+  resetPrompts: () => void;
+};
 
-        }))
-    },
-    prompts : [],
-    addPrompt : (prompt : Prompt) => {
-        set((state)=> ({
-            prompts : [prompt, ...state.prompts],
-        }))
-    }
-,}),
+const getUserScopedStorageKey = () => {
+  if (typeof window === "undefined") return "prompts-guest";
+  const id = localStorage.getItem("clerk-user-id");
+  return `prompts-${id || "guest"}`;
+};
 
-    {name :'prompts' }
-)))
-export default usePromtStore
+const usePromptStore = create<PromptStore>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        page: "create",
+        prompts: [],
+        setPage: (page) => set({ page }),
+        addPrompt: (prompt) =>
+          set((state) => ({ prompts: [prompt, ...state.prompts] })),
+        removePrompt: (id) =>
+          set((state) => ({
+            prompts: state.prompts.filter((p) => p.id !== id),
+          })),
+        resetPrompts: () => set({ prompts: [] }),
+      }),
+      {
+        name: getUserScopedStorageKey(),
+      }
+    )
+  )
+);
+
+export default usePromptStore;

@@ -1,11 +1,14 @@
+// src/app/layout.tsx
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/provider/theme-provider";
-
-import {dark} from "@clerk/themes"
-import {ClerkProvider} from "@clerk/nextjs"
+import { dark } from "@clerk/themes";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { PromptResetOnUserChange } from "@/lib/PromptResetOnUserChange";
+import { SaveClerkUserIdToStorage } from "@/lib/SaveClerkUserIdToStorage";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,7 +22,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Vivid - AI PPT Generator ",
+  title: "Vivid - AI PPT Generator",
   description: "Build AI Powered presentation",
 };
 
@@ -30,28 +33,28 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-    appearance={{
-      baseTheme:dark,
-    }}
+      appearance={{ baseTheme: dark }}
       signInUrl="/sign-in?redirect_url=/dashboard"
-  signUpUrl="/sign-up?redirect_url=/dashboard"
-  >
-    <html lang="en"
-    suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
-      >
-        <ThemeProvider attribute={'class'}
-        defaultTheme="dark"
-        enableSystem={false}
-        disableTransitionOnChange>
-           {children}
-           <Toaster />
-        </ThemeProvider>
-       
-      </body>
-    </html>
+      signUpUrl="/sign-up?redirect_url=/dashboard"
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          suppressHydrationWarning
+        >
+          <ThemeProvider
+            attribute={"class"}
+            defaultTheme="dark"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            <SaveClerkUserIdToStorage /> 
+            <PromptResetOnUserChange /> {/* ✅ Add this line */}
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
