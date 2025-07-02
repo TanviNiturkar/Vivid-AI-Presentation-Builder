@@ -18,7 +18,7 @@ const page = async (props: Props) => {
   return (
     <main className='w-full h-full pt-6'>
         <Suspense fallback={<CreatePageSkeleton/>}>
-        <RenderPage />
+        <RenderPage reset/>
         </Suspense>
     </main>
   )
