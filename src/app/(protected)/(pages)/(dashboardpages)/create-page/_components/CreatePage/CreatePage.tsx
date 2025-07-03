@@ -24,13 +24,13 @@ const CreatePage = ({onSelectOption}: Props) => {
         <motion.div
         variants={itemVariants}
         className='text-center space-y-2'>
-            <h1 className='text-4xl font-bold textprimary'>
+            <h1 className='text-4xl font-bold textprimary pt-5'>
                 How would you like to get started?
             </h1>
             <p className='text-muted-white'> Choose your preferred method to begin</p>
 
         </motion.div>
-        <motion.div className='grid gap-6 md:grid-cols-3'
+        <motion.div className='grid gap-6 md:grid-cols-3 pt-4'
         variants={containerVariants}>
             {CreatePageCard.map((option)=>(
                 <motion.div

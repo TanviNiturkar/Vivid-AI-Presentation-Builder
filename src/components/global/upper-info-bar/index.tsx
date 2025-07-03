@@ -1,3 +1,5 @@
+// src/components/global/upper-info-bar.tsx
+
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { User } from '@prisma/client'
@@ -14,22 +16,28 @@ type Props = {
 
 const UpperInfoBar = ({ user }: Props) => {
   return (
-    <header className="sticky top-0 z-[10] flex shrink-0 flex-wrap items-center gap-2 border-b bg-background p-4 justify-between">
-      <SidebarTrigger className="-ml-1" />
-      <Separator orientation="vertical" className="mr-2 h-4" />
-      <div className="w-full max-w-[95%] flex items-center justify-between gap-4 flex-wrap">
-        <SearchBar />
-        <ThemeSwitcher />
-        <div className="flex flex-wrap gap-4 items-center justify-end">
+    <header className="sticky top-0 z-10 w-full border-b bg-background px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+
+        {/* Left: Sidebar + Search */}
+        <div className="flex items-center gap-2 flex-grow min-w-0">
+          <SidebarTrigger className="shrink-0" />
+          <Separator orientation="vertical" className="h-4" />
+          <div className="flex-grow min-w-[100px] max-w-full">
+            <SearchBar />
+          </div>
+        </div>
+
+        {/* Right: Theme toggle + Buttons */}
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
+          <ThemeSwitcher />
           <Button
             className="bg-primary-80 rounded-lg hover:bg-background-80 text-primary font-semibold cursor-not-allowed"
             disabled
           >
-            <Upload />
+            <Upload className="mr-2 h-4 w-4" />
             Import
           </Button>
-
-          {/* ✅ Show only if subscription is true */}
           <NewProjectButton user={user} />
         </div>
       </div>
