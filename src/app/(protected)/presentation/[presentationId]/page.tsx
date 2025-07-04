@@ -10,8 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
-// ✅ FIXED: dynamic import for Navbar
 import dynamic from 'next/dynamic';
 const Navbar = dynamic(() => import('./_components/Navbar/Navbar'), { ssr: false });
 
@@ -73,11 +71,17 @@ const Page = () => {
         }}
       >
         <Navbar presentationId={params.presentationId as string} />
+
+        {/* Main Layout */}
         <div className="flex-1 flex pt-20 overflow-hidden">
           <LayoutPreview />
-          <div className="flex-1 ml-64 pr-16">
+
+          {/* Editor Area - responsive margin */}
+          <div className="flex-1 px-4 sm:ml-80 sm:pr-16">
             <Editor isEditable={true} />
           </div>
+
+          {/* Right Sidebar (optional) */}
           <EditorSidebar />
         </div>
       </div>

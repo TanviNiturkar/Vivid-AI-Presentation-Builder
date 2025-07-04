@@ -66,7 +66,9 @@ const CalloutBox = ({
         colors[type].bg,
         colors[type].border,
         colors[type].text,
-        isSidebar ? 'text-[0.75rem] p-2 gap-2 max-h-[100px] overflow-auto leading-snug' : 'p-4',
+        isSidebar
+          ? 'text-[0.72rem] p-2 gap-2 leading-snug'
+          : 'p-4 text-[0.92rem] sm:text-base leading-relaxed',
         className
       )}
     >
@@ -76,15 +78,7 @@ const CalloutBox = ({
           isSidebar ? 'h-4 w-4 mt-[2px]' : 'h-5 w-5 mt-1'
         )}
       />
-      <div
-        className={cn(
-          isSidebar
-            ? 'text-[0.72rem] leading-snug'
-            : 'text-sm leading-relaxed'
-        )}
-      >
-        {children}
-      </div>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }

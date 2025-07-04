@@ -1,7 +1,11 @@
 'use client'
 
 import { MasterRecursiveComponent } from '@/app/(protected)/presentation/[presentationId]/_components/editor/MasterRecursiveComponent'
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup
+} from '@/components/ui/resizable'
 import { ContentItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
@@ -58,7 +62,7 @@ const ColumnComponent = ({
         className={cn(
           'h-full w-full rounded-lg overflow-hidden border border-muted shadow-sm',
           !isEditable && '!border-none',
-          isSidebar && 'text-[0.6rem] p-1 gap-1',
+          isSidebar && 'text-[0.6rem] gap-1',
           className
         )}
       >
@@ -68,7 +72,7 @@ const ColumnComponent = ({
               <div
                 className={cn(
                   'h-full w-full overflow-auto bg-white/70 dark:bg-neutral-900/70',
-                  isSidebar ? 'p-1 max-h-[110px]' : 'p-4', // ✅ limit height in sidebar
+                  isSidebar ? 'p-1' : 'p-4',
                   item.className
                 )}
               >

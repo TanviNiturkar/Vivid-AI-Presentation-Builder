@@ -1,3 +1,5 @@
+'use client';
+
 import { Slide } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useSlideStore } from '@/store/useSlideStore';
@@ -16,36 +18,39 @@ const ScaledPreview = ({ slide, isActive, index, isSidebar = false }: Props) => 
 
   if (!slide || !slide.id || !slide.content) return null;
 
-  const width = 276; // ✅ thumbnail width
-  const height = 160; // ✅ thumbnail height
-  const scale = 0.38; // ✅ smaller inner content scale
+  // Original slide dimensions
+  const realWidth = 1080;
+  const realHeight = 720;
+
+  // Sidebar preview thumbnail size
+  const thumbnailWidth = 276;
+  const scale = thumbnailWidth / realWidth;
+  const scaledHeight = realHeight * scale;
 
   return (
     <div
       className={cn(
-        'relative rounded-xl overflow-hidden shadow-md transition-all duration-300 transform',
+        'relative rounded-xl overflow-hidden shadow-md transition-all duration-300 transform bg-white',
         isActive
           ? 'ring-2 ring-blue-500 ring-offset-2 scale-[1.01]'
           : 'hover:scale-[1.02] hover:shadow-lg'
       )}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
+        width: `${thumbnailWidth}px`,
+        height: `${scaledHeight}px`,
         fontFamily: currentTheme.fontFamily,
         backgroundColor: currentTheme.slideBackgroundColor,
         backgroundImage: currentTheme.gradientBackground,
         color: currentTheme.accentColor,
-        overflow: 'hidden',
+        position: 'relative',
       }}
     >
       <div
-        className="absolute inset-0"
         style={{
           transform: `scale(${scale})`,
           transformOrigin: 'top left',
-          width: `${1080}px`,
-          height: `${720}px`,
-          overflow: 'hidden', // ✅ prevent content bleed
+          width: `${realWidth}px`,
+          height: `${realHeight}px`,
           pointerEvents: 'none',
         }}
       >
@@ -54,7 +59,7 @@ const ScaledPreview = ({ slide, isActive, index, isSidebar = false }: Props) => 
           content={slide.content}
           isPreview={true}
           isEditable={false}
-          isSidebar={true} // ✅ makes child components render in sidebar mode
+          isSidebar={true}
           onContentChange={() => {}}
         />
       </div>

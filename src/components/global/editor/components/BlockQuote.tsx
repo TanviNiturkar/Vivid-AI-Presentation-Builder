@@ -20,11 +20,13 @@ const BlockQuote = ({
   return (
     <blockquote
       className={cn(
-        'pl-6 pr-4 py-4 my-4 rounded-xl border-l-4 italic text-gray-700 dark:text-gray-300',
+        'rounded-xl border-l-4 italic transition-shadow duration-300',
+        'text-gray-700 dark:text-gray-300',
         'bg-[rgba(0,0,0,0.02)] dark:bg-[rgba(255,255,255,0.05)]',
-        'hover:shadow-md transition-shadow duration-300',
-        isSidebar &&
-          'text-[0.78rem] px-3 py-2 my-2 max-h-[100px] overflow-auto leading-snug',
+        'hover:shadow-md',
+        isSidebar
+          ? 'text-[0.78rem] px-3 py-2 my-2 leading-snug'
+          : 'text-[1rem] sm:text-[1.05rem] px-6 py-4 my-4 leading-relaxed',
         className
       )}
       style={{ borderLeftColor: currentTheme.accentColor }}

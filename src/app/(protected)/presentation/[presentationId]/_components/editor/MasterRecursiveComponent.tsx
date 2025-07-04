@@ -41,12 +41,7 @@ type MasterRecursiveComponentProps = {
 
 const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
   ({ content, onContentChange, slideId, isSidebar, index, isPreview, isEditable }) => {
-    if (
-      !content ||
-      typeof content !== 'object' ||
-      !('id' in content) ||
-      !('type' in content)
-    ) {
+    if (!content || typeof content !== 'object' || !('id' in content) || !('type' in content)) {
       console.warn('❌ Invalid content item in ContentRenderer:', content);
       return null;
     }
@@ -79,19 +74,31 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
           }),
     };
 
+    const Wrapper = ({ children }: { children: React.ReactNode }) => (
+      <motion.div
+        {...animationProps}
+        className={cn(
+          'w-full h-full overflow-hidden break-words whitespace-pre-wrap',
+          isSidebar ? 'text-[10px]' : 'text-base'
+        )}
+      >
+        {children}
+      </motion.div>
+    );
+
     switch (content.type) {
       case 'heading1':
-        return <motion.div {...animationProps}><Heading1 {...commonProps} /></motion.div>;
+        return <Wrapper><Heading1 {...commonProps} /></Wrapper>;
       case 'heading2':
-        return <motion.div {...animationProps}><Heading2 {...commonProps} /></motion.div>;
+        return <Wrapper><Heading2 {...commonProps} /></Wrapper>;
       case 'heading3':
-        return <motion.div {...animationProps}><Heading3 {...commonProps} /></motion.div>;
+        return <Wrapper><Heading3 {...commonProps} /></Wrapper>;
       case 'heading4':
-        return <motion.div {...animationProps}><Heading4 {...commonProps} /></motion.div>;
+        return <Wrapper><Heading4 {...commonProps} /></Wrapper>;
       case 'title':
-        return <motion.div {...animationProps}><Title {...commonProps} /></motion.div>;
+        return <Wrapper><Title {...commonProps} /></Wrapper>;
       case 'paragraph':
-        return <motion.div {...animationProps}><Paragraph {...commonProps} /></motion.div>;
+        return <Wrapper><Paragraph {...commonProps} /></Wrapper>;
 
       case 'table': {
         const isValidTableData =
@@ -99,12 +106,10 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
           Array.isArray(content.content[0]) &&
           typeof content.content[0][0] === 'string';
 
-        const safeTableContent: string[][] = isValidTableData
-          ? (content.content as string[][])
-          : [['']];
+        const safeTableContent: string[][] = isValidTableData ? (content.content as string[][]) : [['']];
 
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <Table
               content={safeTableContent}
               onChange={(newContent) =>
@@ -115,7 +120,7 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
               isPreview={isPreview}
               isEditable={isEditable}
             />
-          </motion.div>
+          </Wrapper>
         );
       }
 
@@ -125,7 +130,7 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
           : [];
 
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <ColumnComponent
               content={colContent}
               className={content.className}
@@ -134,13 +139,13 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
               isPreview={isPreview}
               isEditable={isEditable}
             />
-          </motion.div>
+          </Wrapper>
         );
       }
 
       case 'image':
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <CustomImage
               src={content.content as string}
               alt={content.alt || 'image'}
@@ -151,16 +156,16 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
               isEditable={isEditable}
               isSidebar={isSidebar}
             />
-          </motion.div>
+          </Wrapper>
         );
 
       case 'blockquote':
         return (
-          <motion.div {...animationProps} className={cn('flex flex-col', content.className)}>
+          <Wrapper>
             <BlockQuote>
               <Paragraph {...commonProps} />
             </BlockQuote>
-          </motion.div>
+          </Wrapper>
         );
 
       case 'numberedList':
@@ -177,13 +182,13 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
           : [];
 
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <ListComponent
               items={listItems}
               onChange={(newItems) => onContentChange(content.id, newItems)}
               className={content.className}
             />
-          </motion.div>
+          </Wrapper>
         );
       }
 
@@ -196,46 +201,42 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
         };
 
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <CalloutBox
               type={normalizeCalloutType(content.callOutType)}
               className={content.className}
             >
               <Paragraph {...commonProps} />
             </CalloutBox>
-          </motion.div>
+          </Wrapper>
         );
       }
 
       case 'codeBlock':
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <CodeBlock
               code={content.code}
               language={content.language}
               onChange={() => {}}
               className={content.className}
             />
-          </motion.div>
+          </Wrapper>
         );
 
       case 'tableOfContents':
         return (
-          <motion.div {...animationProps}>
+          <Wrapper>
             <TableOfContent
-              items={Array.isArray(content.content) ? content.content as string[] : []}
+              items={Array.isArray(content.content) ? (content.content as string[]) : []}
               onItemClick={(id) => console.log(`Navigate to section: ${id}`)}
               className={content.className}
             />
-          </motion.div>
+          </Wrapper>
         );
 
       case 'divider':
-        return (
-          <motion.div {...animationProps}>
-            <Divider className={content.className} />
-          </motion.div>
-        );
+        return <Wrapper><Divider className={content.className} /></Wrapper>;
 
       case 'column': {
         const columnItems = Array.isArray(content.content)
@@ -243,7 +244,7 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
           : [];
 
         return (
-          <motion.div {...animationProps} className={cn('flex flex-col', content.className)}>
+          <Wrapper>
             {columnItems.map((subItem, subIndex) => (
               <React.Fragment key={subItem.id ?? `item-${subIndex}`}>
                 {!isPreview && !subItem.restrictToDrop && subIndex === 0 && isEditable && (
@@ -263,7 +264,7 @@ const ContentRenderer: React.FC<MasterRecursiveComponentProps> = React.memo(
                 )}
               </React.Fragment>
             ))}
-          </motion.div>
+          </Wrapper>
         );
       }
 

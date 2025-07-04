@@ -24,21 +24,24 @@ const ComponentCard = ({ item }: { item: ComponentItemProps }) => {
     <div
       ref={drag as unknown as React.LegacyRef<HTMLDivElement>}
       className={cn(
-        'transition-all duration-300 transform',
+        'transition-all duration-300 transform w-full',
         isDragging ? 'opacity-40 scale-95' : 'opacity-100'
       )}
     >
       <button
         className={cn(
-          'flex flex-col items-center justify-between cursor-grab active:cursor-grabbing gap-2 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700',
-          'bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 shadow-md hover:shadow-xl transition-transform',
-          'hover:scale-[1.03] w-full'
+          'flex flex-col items-center justify-between gap-1 p-2 w-full rounded-lg border shadow-sm',
+          'cursor-grab active:cursor-grabbing transition-transform hover:scale-105',
+          'border-zinc-200 dark:border-zinc-700',
+          'bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800'
         )}
       >
-        <div className="w-full aspect-[16/9] rounded-lg bg-gradient-to-tr from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-700 p-4 flex items-center justify-center shadow-inner">
-          <span className="text-3xl text-primary">{item.icon}</span>
+        <div className="w-full aspect-[5/3] rounded-md p-2 shadow-inner flex items-center justify-center
+          bg-gradient-to-tr from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-700
+        ">
+          <span className="text-xl text-primary">{item.icon}</span>
         </div>
-        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 text-center">
+        <span className="text-[10px] font-medium text-center leading-tight text-gray-700 dark:text-gray-300">
           {item.name}
         </span>
       </button>

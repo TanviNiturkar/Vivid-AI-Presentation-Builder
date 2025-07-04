@@ -1,8 +1,11 @@
+'use client'
+
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LayoutSlides, Slide } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useSlideStore } from '@/store/useSlideStore'
+import { useSidebarStore } from '@/store/useSidebarStore'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useDrag, useDrop } from 'react-dnd'
@@ -11,8 +14,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button'
 import { EllipsisVertical, Trash } from 'lucide-react'
 import { updateSlides } from '@/actions/project'
-
-/* DropZone — no change needed, already styled */
 
 interface DropZoneProps {
   index: number
@@ -57,8 +58,6 @@ export const DropZone: React.FC<DropZoneProps> = ({ index, onDrop, isEditable })
     </div>
   )
 }
-
-/* DraggableSlide — updated only layout styling for responsiveness */
 
 interface DraggableSlideProps {
   slide: Slide
@@ -112,16 +111,16 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
     <div
       ref={ref}
       className={cn(
-        'w-full bg-white rounded-xl shadow-lg p-4 sm:p-6 min-h-[400px] max-h-[800px] mb-8',
-        'flex flex-col relative transition-transform duration-300 transform-gpu hover:scale-[1.01] hover:shadow-2xl',
+        'w-full max-w-[640px] mx-auto bg-white rounded-lg shadow-md px-3 py-4 mb-6',
+        'flex flex-col relative transition-transform duration-300 transform-gpu hover:scale-[1.01] hover:shadow-xl',
         index === currentSlide ? 'ring-2 ring-blue-500 ring-offset-2' : '',
         slide.className,
-        isDragging ? 'opacity-50 rotate-[1deg] scale-95' : 'opacity-100'
+        isDragging ? 'opacity-50 scale-95' : 'opacity-100'
       )}
       style={{ backgroundImage: currentTheme.gradientBackground }}
       onClick={() => setCurrentSlide(index)}
     >
-      <div className='h-full w-full flex-grow overflow-hidden'>
+      <div className='w-full h-full'>
         <MasterRecursiveComponent
           content={slide.content}
           isPreview={false}
@@ -153,7 +152,8 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
   )
 }
 
-/* Main Editor component */
+
+
 
 type Props = {
   isEditable: boolean
@@ -169,6 +169,8 @@ const Editor = ({ isEditable }: Props) => {
     addSlideAtIndex,
     currentSlide,
   } = useSlideStore()
+
+  const { isSidebarOpen } = useSidebarStore()
 
   const orderedSlides = getOrderedSlides()
   const [loading, setLoading] = useState(true)
@@ -231,7 +233,12 @@ const Editor = ({ isEditable }: Props) => {
   }
 
   return (
-    <div className='flex-1 flex flex-col h-full w-full max-w-3xl mx-auto px-4 sm:px-6 mb-20'>
+    <div
+      className={cn(
+        'flex-1 flex flex-col h-full w-full mb-20 overflow-x-hidden px-2 sm:px-4 transition-all duration-300',
+        isSidebarOpen ? 'sm:ml-80' : 'sm:ml-0'
+      )}
+    >
       {loading ? (
         <div className='w-full flex flex-col space-y-6'>
           <Skeleton className='h-52 w-full' />
@@ -261,4 +268,4 @@ const Editor = ({ isEditable }: Props) => {
   )
 }
 
-export default Editor
+export default Editor;

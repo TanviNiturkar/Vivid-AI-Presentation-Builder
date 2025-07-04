@@ -22,7 +22,7 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
       const textarea = internalRef.current
       if (textarea && !isPreview) {
         const adjustHeight = () => {
-          textarea.style.height = '0'
+          textarea.style.height = 'auto'
           textarea.style.height = `${textarea.scrollHeight}px`
         }
         textarea.addEventListener('input', adjustHeight)
@@ -33,7 +33,7 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
 
     const sidebarOverrides = isSidebar
       ? 'text-[0.85rem] leading-tight font-normal px-[6px] py-[4px]'
-      : 'text-base leading-relaxed'
+      : 'text-base sm:text-[1.05rem] leading-relaxed'
 
     const focusRing = !isPreview
       ? `hover:shadow-[0_0_0_2px_rgba(0,0,0,0.1)] 
@@ -56,8 +56,8 @@ const Paragraph = React.forwardRef<HTMLTextAreaElement, ParagraphProps>(
           margin: 0,
           color: currentTheme.fontColor,
           boxSizing: 'content-box',
-          lineHeight: isSidebar ? '1.25em' : '1.5em',
-          minHeight: '1.4em',
+          lineHeight: isSidebar ? '1.25em' : '1.6em',
+          minHeight: isSidebar ? '1.2em' : '2.2em',
           ...styles,
         }}
         readOnly={isPreview}

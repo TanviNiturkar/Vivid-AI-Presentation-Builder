@@ -10,30 +10,36 @@ type Props = {
   isSidebar?: boolean
 }
 
-const CodeBlock = ({ code, language, onChange, className, isSidebar = false }: Props) => {
+const CodeBlock = ({
+  code,
+  language,
+  onChange,
+  className,
+  isSidebar = false
+}: Props) => {
   const { currentTheme } = useSlideStore()
 
   return (
     <div
       className={cn(
         'relative w-full rounded-xl shadow-inner overflow-hidden border',
-        isSidebar && 'text-[0.6rem] min-h-[80px]',
+        isSidebar ? 'text-[0.6rem] min-h-[80px]' : 'text-[clamp(0.85rem,1vw,1rem)] min-h-[120px]',
         className
       )}
       style={{
         backgroundColor: currentTheme.accentColor + '20',
-        borderColor: currentTheme.accentColor + '50',
+        borderColor: currentTheme.accentColor + '50'
       }}
     >
       {language && (
         <div
           className={cn(
-            'font-semibold border-b',
+            'font-semibold border-b select-none',
             isSidebar ? 'px-2 py-0.5 text-[0.55rem]' : 'px-3 py-1 text-xs'
           )}
           style={{
             color: currentTheme.fontColor,
-            borderColor: currentTheme.accentColor + '50',
+            borderColor: currentTheme.accentColor + '50'
           }}
         >
           {language.toUpperCase()}
@@ -44,12 +50,15 @@ const CodeBlock = ({ code, language, onChange, className, isSidebar = false }: P
         value={code}
         onChange={(e) => onChange(e.target.value)}
         className={cn(
-          'w-full resize-none bg-transparent font-mono outline-none',
-          isSidebar ? 'min-h-[80px] p-2 text-[0.6rem]' : 'min-h-[150px] p-4 text-sm'
+          'w-full resize-none bg-transparent font-mono outline-none overflow-auto',
+          isSidebar ? 'p-2 text-[0.6rem]' : 'p-4 text-sm'
         )}
         style={{
           color: currentTheme.fontColor,
           lineHeight: '1.5',
+          fontFamily: 'monospace',
+          whiteSpace: 'pre',
+          fontWeight: 400
         }}
         placeholder="Enter your code here..."
       />

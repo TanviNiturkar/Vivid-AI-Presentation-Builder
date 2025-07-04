@@ -23,7 +23,7 @@ const EditorSidebar = () => {
   };
 
   return (
-    <div className="fixed top-1/2 right-0 transform -translate-y-1/2 z-10">
+    <div className="fixed top-1/2 right-0 transform -translate-y-1/2 z-50">
       <div className="rounded-xl border shadow-lg p-3 bg-white dark:bg-zinc-900 flex flex-col items-center space-y-4">
         
         {/* Layout Button */}
@@ -41,7 +41,11 @@ const EditorSidebar = () => {
               <span className="sr-only">Choose Layout</span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent side="left" align="center" className="w-[480px] p-0">
+          <PopoverContent
+            side="left"
+            align="center"
+            className="w-[90vw] max-w-[480px] p-0"
+          >
             <LayoutChooser />
           </PopoverContent>
         </Popover>
@@ -64,7 +68,7 @@ const EditorSidebar = () => {
           <PopoverContent
             side="left"
             align="center"
-            className="w-[480px] p-0"
+            className="w-[90vw] max-w-[480px] p-0"
             style={{
               backgroundColor: currentTheme.backgroundColor,
               color: currentTheme.fontColor,
@@ -77,7 +81,7 @@ const EditorSidebar = () => {
                     <h3 className="text-sm font-medium text-muted-foreground px-1">
                       {group.name}
                     </h3>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       {group.components.map((item) => (
                         <ComponentCard key={item.componentType} item={item} />
                       ))}
@@ -104,7 +108,7 @@ const EditorSidebar = () => {
               <span className="sr-only">Theme Chooser</span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent side="left" align="center" className="w-80">
+          <PopoverContent side="left" align="center" className="w-[90vw] max-w-[320px]">
             <ThemeChooser />
           </PopoverContent>
         </Popover>

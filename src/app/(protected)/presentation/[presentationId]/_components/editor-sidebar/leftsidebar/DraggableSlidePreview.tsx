@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { cn } from '@/lib/utils';
@@ -35,24 +37,25 @@ const DraggableSlidePreview: React.FC<Props> = ({ slide, index, moveSlide }) => 
     }),
   });
 
-  drag(drop(ref)); // 🔗 Combine drag and drop
+  drag(drop(ref));
 
   return (
     <div
       ref={ref}
       onClick={() => setCurrentSlide(index)}
       className={cn(
-        'mx-auto w-full max-w-[280px]',
-        'cursor-pointer transition-all duration-300',
+        'relative w-full max-w-[300px] mx-auto cursor-pointer transition-all duration-300',
         isDragging ? 'opacity-50 scale-95' : 'opacity-100'
       )}
     >
-      <ScaledPreview
-        slide={slide}
-        index={index}
-        isActive={currentSlide === index}
-        isSidebar={true}
-      />
+      <div className="w-full overflow-hidden">
+        <ScaledPreview
+          slide={slide}
+          index={index}
+          isActive={currentSlide === index}
+          isSidebar={true}
+        />
+      </div>
     </div>
   );
 };

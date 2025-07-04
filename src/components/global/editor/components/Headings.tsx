@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import { useSlideStore } from '@/store/useSlideStore'
-import React, { useEffect, useRef, forwardRef } from 'react'
+import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 
 interface HeadingProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string
@@ -17,6 +17,10 @@ const createHeading = (displayName: string, defaultClassName: string) => {
       const textareaRef = useRef<HTMLTextAreaElement>(null)
       const { currentTheme } = useSlideStore()
 
+      // Forward internal ref to parent
+      useImperativeHandle(ref, () => textareaRef.current as HTMLTextAreaElement)
+
+      // Auto-resize logic
       useEffect(() => {
         const textarea = textareaRef.current
         if (textarea && !isPreview) {
@@ -35,11 +39,13 @@ const createHeading = (displayName: string, defaultClassName: string) => {
         : ''
 
       const sidebarOverrides = isSidebar
-        ? 'font-semibold leading-snug text-[0.75rem]'
+        ? 'text-sm font-semibold leading-snug px-[4px]'
         : defaultClassName
 
       return (
         <textarea
+          ref={textareaRef}
+          readOnly={isPreview}
           className={cn(
             'w-full bg-transparent placeholder:text-gray-400 focus:outline-none resize-none overflow-hidden',
             'transition-all duration-200',
@@ -48,15 +54,14 @@ const createHeading = (displayName: string, defaultClassName: string) => {
             className
           )}
           style={{
-            padding: 0,
+            padding: isSidebar ? '0.2rem 0.4rem' : '0',
             margin: 0,
             boxSizing: 'content-box',
-            minHeight: '1.2em',
+            minHeight: '1.4em',
+            lineHeight: isSidebar ? '1.25em' : '1.4em',
             color: currentTheme.fontColor + 'DD',
             ...styles,
           }}
-          ref={textareaRef}
-          readOnly={isPreview}
           {...props}
         />
       )
@@ -67,7 +72,7 @@ const createHeading = (displayName: string, defaultClassName: string) => {
   return Heading
 }
 
-// ✅ Export themed headings with appropriate styles
+// ✅ Export all heading levels and title
 const Heading1 = createHeading('Heading1', 'text-4xl leading-tight')
 const Heading2 = createHeading('Heading2', 'text-3xl leading-snug')
 const Heading3 = createHeading('Heading3', 'text-2xl leading-snug')

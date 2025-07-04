@@ -12,13 +12,17 @@ const Divider = ({ className = '', isSidebar = false }: Props) => {
 
   return (
     <hr
+      aria-hidden="true"
       className={cn(
-        'transition-all duration-300 ease-in-out border-0 rounded-full bg-opacity-70',
-        isSidebar ? 'my-2 h-[1px]' : 'my-6 h-[2px]',
-        'hover:scale-[1.02] hover:bg-opacity-100',
+        'transition-all duration-300 ease-in-out border-0 rounded-full',
+        isSidebar ? 'my-2 min-h-[1.5px]' : 'my-6 h-[2px]',
+        'hover:scale-[1.01]',
         className
       )}
-      style={{ backgroundColor: currentTheme.accentColor }}
+      style={{
+        backgroundColor: currentTheme.accentColor || '#999',
+        opacity: 0.8
+      }}
     />
   )
 }

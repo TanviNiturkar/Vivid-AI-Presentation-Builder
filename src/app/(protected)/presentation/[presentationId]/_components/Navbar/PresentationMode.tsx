@@ -46,7 +46,7 @@ const PresentationMode = ({ onClose }: Props) => {
   return (
     <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
       <div
-        className="relative w-full h-full max-w-[177.78vh] max-h-screen aspect-video overflow-hidden rounded-lg shadow-2xl border border-white/10"
+        className="relative w-full h-full overflow-hidden rounded-lg shadow-2xl border border-white/10"
         style={{
           backgroundColor: currentTheme.slideBackgroundColor,
           backgroundImage: currentTheme.gradientBackground,
@@ -56,22 +56,25 @@ const PresentationMode = ({ onClose }: Props) => {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlideIndex}
-            initial={{ opacity: 0, scale: 0.9, rotateX: 10 }}
-            animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-            exit={{ opacity: 0, scale: 1.1, rotateX: -10 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.5 }}
-            className={`w-full h-full p-10 text-white ${slides[currentSlideIndex].className}`}
+            className={`w-full h-full overflow-auto pt-30 p-10 text-white`}
             style={{
               color: currentTheme.accentColor,
+              maxHeight: '100vh',
             }}
           >
-            <MasterRecursiveComponent
-              content={slides[currentSlideIndex].content}
-              slideId={slides[currentSlideIndex].id}
-              isPreview={false}
-              isEditable={false}
-              onContentChange={() => {}}
-            />
+            <div className="w-full max-w-[1200px] mx-auto">
+              <MasterRecursiveComponent
+                content={slides[currentSlideIndex].content}
+                slideId={slides[currentSlideIndex].id}
+                isPreview={false}
+                isEditable={false}
+                onContentChange={() => {}}
+              />
+            </div>
           </motion.div>
         </AnimatePresence>
 

@@ -48,22 +48,25 @@ const ListItem: React.FC<ListItemProps> = ({
     onChange={(e) => onChange(index, e.target.value)}
     onKeyDown={(e) => onKeyDown(e, index)}
     className={cn(
-      'bg-transparent outline-none w-full border-b border-dashed border-gray-300 transition-all duration-200',
-      isSidebar && isPreview ? 'text-[0.65rem] py-0.5' : 'py-1 text-sm'
+      'bg-transparent outline-none w-full border-b border-dashed border-gray-300',
+      'transition-all duration-200',
+      isSidebar && isPreview ? 'text-xs py-0.5' : 'py-1 text-sm'
     )}
     style={{ color: fontColor }}
     readOnly={!isEditable}
   />
 )
 
-const NumberedList: React.FC<ListProps> = ({
-  items,
-  onChange,
-  className,
-  isEditable = true,
-  isSidebar,
-  isPreview
-}) => {
+const BaseList = (
+  Tag: 'ol' | 'ul',
+  listClass: string,
+  items: string[],
+  onChange: (items: string[]) => void,
+  isEditable: boolean,
+  isSidebar?: boolean,
+  isPreview?: boolean,
+  className?: string
+) => {
   const { currentTheme } = useSlideStore()
   const fontColor = darkenHex(currentTheme.fontColor)
 
@@ -87,11 +90,13 @@ const NumberedList: React.FC<ListProps> = ({
     }
   }
 
+  const Wrapper = Tag as any
   return (
-    <ol
+    <Wrapper
       className={cn(
-        'list-decimal list-inside space-y-2 pl-2',
-        isSidebar && isPreview && 'space-y-1 text-[0.65rem]',
+        listClass,
+        isSidebar && isPreview && 'text-xs space-y-1',
+        'space-y-2 pl-3',
         className
       )}
       style={{ color: fontColor }}
@@ -110,67 +115,15 @@ const NumberedList: React.FC<ListProps> = ({
           />
         </li>
       ))}
-    </ol>
+    </Wrapper>
   )
 }
 
-export const BulletList: React.FC<ListProps> = ({
-  items,
-  onChange,
-  className,
-  isEditable = true,
-  isSidebar,
-  isPreview
-}) => {
-  const { currentTheme } = useSlideStore()
-  const fontColor = darkenHex(currentTheme.fontColor)
+const NumberedList: React.FC<ListProps> = (props) =>
+  BaseList('ol', 'list-decimal list-inside', props.items, props.onChange, props.isEditable ?? true, props.isSidebar, props.isPreview, props.className)
 
-  const handleChange = (index: number, value: string) => {
-    const newItems = [...items]
-    newItems[index] = value
-    onChange(newItems)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      const newItems = [...items]
-      newItems.splice(index + 1, 0, '')
-      onChange(newItems)
-    } else if (e.key === 'Backspace' && items[index] === '' && items.length > 1) {
-      e.preventDefault()
-      const newItems = [...items]
-      newItems.splice(index, 1)
-      onChange(newItems)
-    }
-  }
-
-  return (
-    <ul
-      className={cn(
-        'list-disc list-inside space-y-2 pl-3',
-        isSidebar && isPreview && 'space-y-1 text-[0.65rem]',
-        className
-      )}
-      style={{ color: fontColor }}
-    >
-      {items.map((item, index) => (
-        <li key={index}>
-          <ListItem
-            item={item}
-            index={index}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            isEditable={isEditable}
-            fontColor={fontColor}
-            isSidebar={isSidebar}
-            isPreview={isPreview}
-          />
-        </li>
-      ))}
-    </ul>
-  )
-}
+export const BulletList: React.FC<ListProps> = (props) =>
+  BaseList('ul', 'list-disc list-inside', props.items, props.onChange, props.isEditable ?? true, props.isSidebar, props.isPreview, props.className)
 
 export const TodoList: React.FC<ListProps> = ({
   items,
@@ -192,8 +145,10 @@ export const TodoList: React.FC<ListProps> = ({
   }
 
   const handleChange = (index: number, value: string) => {
+    const cleanValue = value.replace(/^\[[ x]\]\s*/, '')
+    const prefix = items[index].startsWith('[x] ') ? '[x] ' : '[ ] '
     const newItems = [...items]
-    newItems[index] = value.startsWith('[ ] ') || value.startsWith('[x] ') ? value : `[ ] ${value}`
+    newItems[index] = `${prefix}${cleanValue}`
     onChange(newItems)
   }
 
@@ -201,7 +156,7 @@ export const TodoList: React.FC<ListProps> = ({
     if (e.key === 'Enter') {
       e.preventDefault()
       const newItems = [...items]
-      newItems.splice(index + 1, 0, '')
+      newItems.splice(index + 1, 0, '[ ] ')
       onChange(newItems)
     } else if (e.key === 'Backspace' && items[index] === '' && items.length > 1) {
       e.preventDefault()
@@ -214,8 +169,8 @@ export const TodoList: React.FC<ListProps> = ({
   return (
     <ul
       className={cn(
-        'space-y-2 pl-2',
-        isSidebar && isPreview && 'space-y-1 text-[0.65rem]',
+        'space-y-2 pl-3',
+        isSidebar && isPreview && 'space-y-1 text-xs',
         className
       )}
       style={{ color: fontColor }}
@@ -229,15 +184,13 @@ export const TodoList: React.FC<ListProps> = ({
             type="checkbox"
             checked={item.startsWith('[x] ')}
             onChange={() => toggleCheckbox(index)}
-            className="form-checkbox rounded-sm accent-blue-500 scale-110"
+            className="form-checkbox rounded-sm accent-blue-500 scale-[1.05] sm:scale-110"
             disabled={!isEditable}
           />
           <ListItem
             item={item.replace(/^\[[ x]\] /, '')}
             index={index}
-            onChange={(idx, value) =>
-              handleChange(idx, `${item.startsWith('[x] ') ? '[x] ' : '[ ] '}${value}`)
-            }
+            onChange={handleChange}
             onKeyDown={handleKeyDown}
             isEditable={isEditable}
             fontColor={fontColor}
