@@ -16,7 +16,8 @@ type Props = {
 async function fetchBase64(url: string): Promise<string | null> {
   try {
     const res = await fetch(url);
-    const blob = await res.blob();
+if (!res.ok) throw new Error(`Fetch failed for: ${url}`);
+const blob = await res.blob();
     const reader = new FileReader();
     return await new Promise((resolve, reject) => {
       reader.onloadend = () => {
