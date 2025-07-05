@@ -23,7 +23,7 @@ const UploadImage = ({ contentId, onContentChange }: Props) => {
   return (
     <div>
       <FileUploaderRegular
-        sourceList="local url dropbox"
+        sourceList="local url"
         pubkey={process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY!}
         multiple={false}
         onFileUploadSuccess={handleChangeEvent}
