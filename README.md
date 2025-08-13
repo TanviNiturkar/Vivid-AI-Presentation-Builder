@@ -2,11 +2,19 @@
 
 Vivid is an AI-powered tool that helps you **generate beautiful presentations instantly**.  
 Type a topic and Vivid creates the slide content and styles automatically — so you can focus on presenting.
+Built to save hours for students, professionals, and creators who need visually appealing presentations instantly.
 
 ---
 
 ## 🚀 Live Demo
 👉 [Try Vivid here](https://vivid-jyu3.onrender.com)  
+
+---
+
+##  Feature Demo
+![Vivid Demo GIF](https://raw.githubusercontent.com/TanviNiturkar/assets/main/Vivid-demo.gif)
+
+*A quick visual demo — drag a topic, generate slides, and watch AI do its magic.*
 
 ---
 
@@ -29,10 +37,11 @@ Type a topic and Vivid creates the slide content and styles automatically — so
 ---
 
 ## 📸 Screenshots
-![Home page screenshot](./screenshots/home.png)  
-![Generated slide screenshot](./screenshots/slide.png)
-
-*(Replace paths with the actual image links you upload.)*
+![Home page screenshot](https://raw.githubusercontent.com/TanviNiturkar/assets/main/Screenshot%202025-08-09%20222508.png)  
+![Create New Project](https://raw.githubusercontent.com/TanviNiturkar/assets/main/Screenshot%202025-08-09%20222659.png)
+![Select a Theme](https://raw.githubusercontent.com/TanviNiturkar/assets/main/Screenshot%202025-08-09%20222853.png)
+![Generated slide screenshot](https://raw.githubusercontent.com/TanviNiturkar/assets/main/Screenshot%202025-08-09%20223012.png)
+![Drag & Drop Function](https://raw.githubusercontent.com/TanviNiturkar/assets/main/Screenshot%202025-08-09%20223129.png)
 
 ---
 
@@ -50,6 +59,13 @@ Type a topic and Vivid creates the slide content and styles automatically — so
 
 ## 🤖 How AI is used
 Vivid uses OpenAI (GPT) to generate structured slide text (titles, bullets, descriptions). The app then lays out slides with a modern design automatically.
+
+---
+
+## 📚 What I Learned
+  - Integrating OpenAI API for dynamic content generation
+  - Managing state efficiently with Zustand
+  - Designing responsive UI with Tailwind CSS
 
 ---
 
