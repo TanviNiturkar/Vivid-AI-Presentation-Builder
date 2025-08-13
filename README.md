@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 Vivid — AI Presentation Builder
 
-## Getting Started
+Vivid is an AI-powered tool that helps you **generate beautiful presentations instantly**.  
+Type a topic and Vivid creates the slide content and styles automatically — so you can focus on presenting.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Live Demo
+👉 [Try Vivid here](https://vivid-jyu3.onrender.com)  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 Tech Stack
+- Next.js, React, TypeScript
+- Tailwind CSS
+- OpenAI (GPT) for content generation
+- Zustand for state
+- Vercel for deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✨ Features
+- 🧠 **AI Slide Generation** — Create full presentations from a topic or prompt.
+- 🖱️ **Drag & Drop** — Drop images or files straight into the editor to add them to slides.
+- 🎨 **Themes & Templates** — Choose from preset themes and color palettes to style slides.
+- ✏️ **Slide Editor** — Edit text, change fonts, rearrange elements in the editor.
+- 📄 **Export / Download** — Export slides as PPTX.
+  
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📸 Screenshots
+![Home page screenshot](./screenshots/home.png)  
+![Generated slide screenshot](./screenshots/slide.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+*(Replace paths with the actual image links you upload.)*
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🚀 How to Use (Paid flow)
+1. **Sign up / Log in** – Create an account or log in.
+2. **Upgrade / Make Payment** – Go to Sidebar  → select Upgrade → complete payment (card/UPI).
+3. **Create New Project** – Click **New Project** and give it a name.
+4. **Choose Creative AI** – Select **Creative AI** mode for auto-generated slides.
+5. **Add Content** – Type a topic or drag & drop images/files into the editor.
+6. **Edit & Theme** – Use the editor to change text, select a theme, and arrange slides.
+7. **Generate & Preview** – Click **Generate** and preview slides.
+8. **Export** – Click **Download** to save as PPTX (available with plan).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤖 How AI is used
+Vivid uses OpenAI (GPT) to generate structured slide text (titles, bullets, descriptions). The app then lays out slides with a modern design automatically.
+
+---
+
+## 🧑‍💻 About the Project
+Created by Tanvi — I build full-stack projects to solve practical problems.  
+Check my other projects on my GitHub profile: https://github.com/TanviNiturkar
